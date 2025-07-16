@@ -163,7 +163,3 @@ app.version=1.0-SNAPSHOT
 
 # Add your custom configuration here
 ```
-
-### Logging Configuration
-
-Customize logging behavior in `src/main/resources/logback.xml`.
