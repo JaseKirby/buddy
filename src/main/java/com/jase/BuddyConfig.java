@@ -11,7 +11,7 @@ public class BuddyConfig {
     public static final String WORKFLOW_ID_PREFIX = "buddy-workflow-";
     
     // AI Model Configuration
-    public static final String DEFAULT_MODEL = "gpt-3.5-turbo";
+    public static final String DEFAULT_MODEL = "gpt-4o-mini";
     public static final String OPENAI_API_KEY_ENV = "OPENAI_API_KEY";
     
     // Response Configuration

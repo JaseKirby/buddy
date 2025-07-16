@@ -1,8 +1,10 @@
 package com.jase;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class for Buddy AI Agent components
@@ -67,6 +69,6 @@ public class BuddyWorkflowTest {
         assertNotNull(BuddyConfig.DEFAULT_MODEL);
         assertNotNull(BuddyConfig.SYSTEM_PROMPT);
         assertEquals("buddy-task-queue", BuddyConfig.TASK_QUEUE);
-        assertEquals("gpt-3.5-turbo", BuddyConfig.DEFAULT_MODEL);
+        assertEquals("gpt-4o-mini", BuddyConfig.DEFAULT_MODEL);
     }
 }

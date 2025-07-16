@@ -26,7 +26,7 @@ Configure your AI service by setting one of the following environment variable s
 #### Option 1: OpenAI
 ```bash
 export OPENAI_API_KEY="your-openai-api-key"
-export MODEL_ID="gpt-3.5-turbo"  # Optional, defaults to gpt-3.5-turbo
+export MODEL_ID="gpt-4o-mini"  # Optional, defaults to gpt-4o-mini
 ```
 
 ### Build and Run
