@@ -7,7 +7,7 @@
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>buddy</name>
-  <description>Buddy AI Agent using Temporal workflow and semantic-kernel</description>
+  <description>Buddy AI Agent using Temporal workflow and LangChain4j</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

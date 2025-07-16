@@ -1,7 +1,5 @@
 package com.jase;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +41,7 @@ public class BuddyActivities implements BuddyActivitiesInterface {
             // Create OpenAI chat model
             this.chatModel = OpenAiChatModel.builder()
                     .apiKey(apiKey)
-                    .modelName(System.getenv().getOrDefault("MODEL_ID", "gpt-3.5-turbo"))
+                    .modelName(System.getenv().getOrDefault("MODEL_ID", "gpt-4o-mini"))
                     .build();
 
             // Create AI assistant with tools

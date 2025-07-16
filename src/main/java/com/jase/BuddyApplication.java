@@ -13,7 +13,7 @@ import io.temporal.worker.WorkerFactory;
 
 /**
  * Main application class for Buddy AI Agent
- * This application demonstrates how to integrate Temporal workflows with Semantic Kernel
+ * This application demonstrates how to integrate Temporal workflows with LangChain4j
  */
 public class BuddyApplication {
     

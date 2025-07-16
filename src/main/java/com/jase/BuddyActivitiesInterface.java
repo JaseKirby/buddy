@@ -19,7 +19,7 @@ public interface BuddyActivitiesInterface {
     String preprocessInput(String input);
     
     /**
-     * Generate AI response using Semantic Kernel
+     * Generate AI response using LangChain4j
      * @param input Preprocessed user input
      * @return AI generated response
      */

@@ -1,10 +1,11 @@
 package com.jase;
 
-import io.temporal.activity.ActivityOptions;
-import io.temporal.workflow.Workflow;
+import java.time.Duration;
+
 import org.slf4j.Logger;
 
-import java.time.Duration;
+import io.temporal.activity.ActivityOptions;
+import io.temporal.workflow.Workflow;
 
 /**
  * Temporal workflow implementation for Buddy AI Agent
@@ -37,7 +38,7 @@ public class BuddyWorkflowImpl implements BuddyWorkflow {
             String preprocessedInput = activities.preprocessInput(userInput);
             logger.info("Input preprocessed successfully");
             
-            // Step 2: Generate response using Semantic Kernel
+            // Step 2: Generate response using LangChain4j
             String response = activities.generateResponse(preprocessedInput);
             logger.info("Response generated successfully");
             

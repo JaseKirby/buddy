@@ -8,36 +8,19 @@
         </encoder>
     </appender>
     
-    <!-- File appender -->
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>buddy.log</file>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-    
     <!-- Logger for Buddy application -->
     <logger name="com.jase" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
     </logger>
     
     <!-- Logger for Temporal -->
     <logger name="io.temporal" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-    </logger>
-    
-    <!-- Logger for Semantic Kernel -->
-    <logger name="com.microsoft.semantickernel" level="INFO" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
     </logger>
     
     <!-- Root logger -->
     <root level="WARN">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
     </root>
     
 </configuration>
