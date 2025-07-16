@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.jase</groupId>
@@ -9,26 +10,12 @@
   <description>Buddy AI Agent using Temporal workflow and semantic-kernel</description>
 
   <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <temporal.version>1.25.2</temporal.version>
-    <sk.version>1.4.4-RC1</sk.version>
+    <langchain4j.version>1.1.0</langchain4j.version>
     <slf4j.version>2.0.9</slf4j.version>
     <logback.version>1.4.14</logback.version>
   </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>com.microsoft.semantic-kernel</groupId>
-        <artifactId>semantickernel-bom</artifactId>
-        <version>${sk.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <!-- Temporal Dependencies -->
@@ -44,14 +31,15 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Semantic Kernel Dependencies -->
     <dependency>
-      <groupId>com.microsoft.semantic-kernel</groupId>
-      <artifactId>semantickernel-api</artifactId>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-open-ai</artifactId>
+      <version>${langchain4j.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.microsoft.semantic-kernel</groupId>
-      <artifactId>semantickernel-aiservices-openai</artifactId>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j</artifactId>
+      <version>${langchain4j.version}</version>
     </dependency>
 
     <!-- Logging -->
@@ -88,8 +76,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.12.1</version>
         <configuration>
-          <source>17</source>
-          <target>17</target>
+          <release>21</release>
         </configuration>
       </plugin>
       <plugin>

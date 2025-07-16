@@ -5,82 +5,59 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.azure.ai.openai.OpenAIAsyncClient;
-import com.azure.ai.openai.OpenAIClientBuilder;
-import com.azure.core.credential.AzureKeyCredential;
-import com.microsoft.semantickernel.Kernel;
-import com.microsoft.semantickernel.aiservices.openai.chatcompletion.OpenAIChatCompletion;
-import com.microsoft.semantickernel.orchestration.InvocationContext;
-import com.microsoft.semantickernel.orchestration.InvocationReturnMode;
-import com.microsoft.semantickernel.orchestration.ToolCallBehavior;
-import com.microsoft.semantickernel.plugin.KernelPlugin;
-import com.microsoft.semantickernel.plugin.KernelPluginFactory;
-import com.microsoft.semantickernel.services.chatcompletion.AuthorRole;
-import com.microsoft.semantickernel.services.chatcompletion.ChatCompletionService;
-import com.microsoft.semantickernel.services.chatcompletion.ChatHistory;
-import com.microsoft.semantickernel.services.chatcompletion.ChatMessageContent;
+import dev.langchain4j.memory.ChatMemory;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.service.AiServices;
 
 /**
  * Temporal activities implementation for Buddy AI Agent Integrates with
- * Semantic Kernel for AI processing
+ * LangChain4j for AI processing
  */
 public class BuddyActivities implements BuddyActivitiesInterface {
 
     private static final Logger logger = LoggerFactory.getLogger(BuddyActivities.class);
 
-    // Semantic Kernel components
-    private final Kernel kernel;
-    private final ChatCompletionService chatCompletionService;
-    private final ChatHistory chatHistory;
-    private final InvocationContext invocationContext;
+    // LangChain4j components
+    private final OpenAiChatModel chatModel;
+    private final ChatMemory chatMemory;
+    private final BuddyAssistant assistant;
+    private final BuddyPlugin buddyPlugin;
+
+    // AI Assistant interface
+    interface BuddyAssistant {
+        String chat(String message);
+    }
 
     public BuddyActivities() {
-        // Initialize Semantic Kernel components
+        // Initialize LangChain4j components
+        this.buddyPlugin = new BuddyPlugin();
+        this.chatMemory = MessageWindowChatMemory.withMaxMessages(20);
 
         // Try to create OpenAI client first, fallback to mock mode if not available
         String apiKey = System.getenv("OPENAI_API_KEY");
 
         if (apiKey != null && !apiKey.trim().isEmpty()) {
+            logger.info("Initializing LangChain4j with OpenAI");
 
-            logger.info("Initializing Semantic Kernel with OpenAI");
+            // Create OpenAI chat model
+            this.chatModel = OpenAiChatModel.builder()
+                    .apiKey(apiKey)
+                    .modelName(System.getenv().getOrDefault("MODEL_ID", "gpt-3.5-turbo"))
+                    .build();
 
-            // Create OpenAI client
-            OpenAIAsyncClient client = new OpenAIClientBuilder()
-                    .credential(new AzureKeyCredential(apiKey))
-                    .buildAsyncClient();
-
-            // Create chat completion service
-            this.chatCompletionService = OpenAIChatCompletion.builder()
-                    .withModelId(System.getenv().getOrDefault("MODEL_ID", "gpt-3.5-turbo"))
-                    .withOpenAIAsyncClient(client)
+            // Create AI assistant with tools
+            this.assistant = AiServices.builder(BuddyAssistant.class)
+                    .chatModel(chatModel)
+                    .chatMemory(chatMemory)
+                    .tools(buddyPlugin)
                     .build();
 
         } else {
             logger.warn("No AI service configuration found. Running in mock mode.");
-            this.chatCompletionService = null;
+            this.chatModel = null;
+            this.assistant = null;
         }
-
-        // Create kernel with the chat completion service
-        if (this.chatCompletionService != null) {
-            // Create the BuddyPlugin
-            KernelPlugin buddyPlugin = KernelPluginFactory.createFromObject(new BuddyPlugin(), "BuddyPlugin");
-
-            this.kernel = Kernel.builder()
-                    .withAIService(ChatCompletionService.class, chatCompletionService)
-                    .withPlugin(buddyPlugin)
-                    .build();
-        } else {
-            this.kernel = null;
-        }
-
-        // Initialize chat history
-        this.chatHistory = new ChatHistory();
-
-        // Configure invocation context for function calling
-        this.invocationContext = new InvocationContext.Builder()
-                .withReturnMode(InvocationReturnMode.LAST_MESSAGE_ONLY)
-                .withToolCallBehavior(ToolCallBehavior.allowAllKernelFunctions(true))
-                .build();
 
         logger.info("Buddy AI Agent activities initialized successfully");
     }
@@ -107,39 +84,17 @@ public class BuddyActivities implements BuddyActivitiesInterface {
         logger.info("Generating response for input: {}", input);
 
         try {
-            if (chatCompletionService != null && kernel != null) {
-                // Add user message to chat history
-                chatHistory.addUserMessage(input);
-
-                // Get response from AI service
-                List<ChatMessageContent<?>> results = chatCompletionService
-                        .getChatMessageContentsAsync(chatHistory, kernel, invocationContext)
-                        .block();
-
-                if (results != null && !results.isEmpty()) {
-                    for (ChatMessageContent<?> result : results) {
-                        // Process assistant responses
-                        if (result.getAuthorRole() == AuthorRole.ASSISTANT && result.getContent() != null) {
-                            String responseContent = result.getContent();
-
-                            // Add the assistant's response to chat history
-                            chatHistory.addMessage(result);
-
-                            logger.info("Generated response using Semantic Kernel");
-                            return responseContent;
-                        }
-                    }
-                }
-
-                logger.warn("No valid response from Semantic Kernel, falling back to mock response");
-                return generateMockResponse(input);
-
+            if (assistant != null) {
+                // Generate response using LangChain4j assistant
+                String response = assistant.chat(input);
+                logger.info("Generated response using LangChain4j");
+                return response;
             } else {
-                logger.info("Semantic Kernel not available, using mock response");
+                logger.info("LangChain4j not available, using mock response");
                 return generateMockResponse(input);
             }
         } catch (Exception e) {
-            logger.error("Error generating response with Semantic Kernel", e);
+            logger.error("Error generating response with LangChain4j", e);
             return generateMockResponse(input);
         }
     }

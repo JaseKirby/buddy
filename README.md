@@ -1,14 +1,14 @@
 # Buddy AI Agent
 
-A powerful AI-powered assistant built with Java, integrating **Temporal workflows** and **Microsoft Semantic Kernel** for intelligent task processing and conversation management.
+A powerful AI-powered assistant built with Java, integrating **Temporal workflows** and **LangChain4j** for intelligent task processing and conversation management.
 
 ## Features
 
-- 🤖 **AI-Powered Conversations**: Powered by OpenAI GPT models through Semantic Kernel
+- 🤖 **AI-Powered Conversations**: Powered by OpenAI GPT models through LangChain4j
 - ⚡ **Temporal Workflows**: Robust, scalable workflow orchestration
-- 🔌 **Plugin System**: Extensible plugin architecture for custom functions
-- 🌤️ **Built-in Functions**: Weather, time, calculations, and user preferences
-- 🔧 **Configurable**: Supports both OpenAI and Azure OpenAI services
+- 🔌 **Tool System**: Extensible tool architecture for custom functions
+- 🌤️ **Built-in Tools**: Weather, time, calculations, and user preferences
+- 🔧 **Configurable**: Supports OpenAI API integration
 - 📝 **Conversation History**: Maintains context across interactions
 
 ## Quick Start
@@ -27,13 +27,6 @@ Configure your AI service by setting one of the following environment variable s
 ```bash
 export OPENAI_API_KEY="your-openai-api-key"
 export MODEL_ID="gpt-3.5-turbo"  # Optional, defaults to gpt-3.5-turbo
-```
-
-#### Option 2: Azure OpenAI
-```bash
-export AZURE_OPENAI_API_KEY="your-azure-openai-key"
-export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export MODEL_ID="gpt-35-turbo"  # Optional, defaults to gpt-35-turbo
 ```
 
 ### Build and Run
@@ -55,28 +48,29 @@ export MODEL_ID="gpt-35-turbo"  # Optional, defaults to gpt-35-turbo
    mvn exec:java -Dexec.mainClass="com.jase.BuddyApplication"
    ```
 
-## Semantic Kernel Integration
+## LangChain4j Integration
 
-This project follows the [Microsoft Semantic Kernel Java quick start guide](https://learn.microsoft.com/en-us/semantic-kernel/get-started/quick-start-guide?tabs=Java&pivots=programming-language-java) and includes:
+This project uses **LangChain4j**, a Java library that provides seamless integration with Large Language Models and includes:
 
 ### Core Components
 
-- **Kernel**: The central orchestrator that manages AI services and plugins
-- **Chat Completion Service**: Handles conversations with OpenAI/Azure OpenAI
-- **Plugin System**: Enables the AI to call custom functions
-- **Function Calling**: Automatic invocation of functions based on user requests
+- **ChatLanguageModel**: Manages communication with OpenAI models
+- **AiServices**: Creates AI assistants with automatic tool integration
+- **ChatMemory**: Maintains conversation context across interactions
+- **Tool System**: Enables the AI to call custom functions
+- **Automatic Function Calling**: Seamless invocation of tools based on user requests
 
-### Built-in Plugin Functions
+### Built-in Tool Functions
 
-The `BuddyPlugin` provides these functions:
-
-| Function | Description | Example Usage |
+The `BuddyPlugin` provides these tools:
+|| Tool | Description | Example Usage |
 |----------|-------------|---------------|
-| `get_current_time` | Returns current date and time | "What time is it?" |
-| `get_weather(location)` | Gets weather for a location | "What's the weather in London?" |
-| `get_user_info(info_type)` | Retrieves user information | "What's my name?" |
-| `set_user_preference(key, value)` | Sets user preferences | "Set my name to John" |
+| `getCurrentTime` | Returns current date and time | "What time is it?" |
+| `getWeather(location)` | Gets weather for a location | "What's the weather in London?" |
+| `getUserInfo(infoType)` | Retrieves user information | "What's my name?" |
+| `setUserPreference(key, value)` | Sets user preferences | "Set my name to John" |
 | `calculate(expression)` | Performs calculations | "Calculate 15 * 7" |
+| `getHelp` | Shows available functions | "What can you do?" |
 | `help` | Shows available functions | "What can you do?" |
 
 ### Example Interactions
@@ -104,7 +98,7 @@ src/main/java/com/jase/
 ├── BuddyApplication.java          # Main application entry point
 ├── BuddyWorkflow.java             # Temporal workflow interface
 ├── BuddyWorkflowImpl.java         # Temporal workflow implementation
-├── BuddyActivities.java           # Semantic Kernel integration
+├── BuddyActivities.java           # LangChain4j integration
 ├── BuddyActivitiesInterface.java  # Activities interface
 ├── BuddyPlugin.java               # Custom plugin with utility functions
 └── BuddyConfig.java               # Configuration management
@@ -112,7 +106,7 @@ src/main/java/com/jase/
 
 ### Technology Stack
 
-- **[Microsoft Semantic Kernel](https://learn.microsoft.com/en-us/semantic-kernel/)**: AI orchestration and plugin system
+- **[LangChain4j](https://github.com/langchain4j/langchain4j)**: AI orchestration and tool system
 - **[Temporal](https://temporal.io/)**: Workflow orchestration engine
 - **[OpenAI API](https://platform.openai.com/)**: Large Language Model integration
 - **Maven**: Build and dependency management
@@ -122,12 +116,12 @@ src/main/java/com/jase/
 
 ```xml
 <dependency>
-    <groupId>com.microsoft.semantic-kernel</groupId>
-    <artifactId>semantickernel-api</artifactId>
+    <groupId>dev.langchain4j</groupId>
+    <artifactId>langchain4j</artifactId>
 </dependency>
 <dependency>
-    <groupId>com.microsoft.semantic-kernel</groupId>
-    <artifactId>semantickernel-aiservices-openai</artifactId>
+    <groupId>dev.langchain4j</groupId>
+    <artifactId>langchain4j-open-ai</artifactId>
 </dependency>
 <dependency>
     <groupId>io.temporal</groupId>
@@ -137,18 +131,17 @@ src/main/java/com/jase/
 
 ## Development
 
-### Creating Custom Plugins
+### Creating Custom Tools
 
-To create a new plugin, follow this pattern:
+To create a new tool, follow this pattern:
 
 ```java
-public class MyCustomPlugin {
+public class MyCustomTool {
     
-    @DefineKernelFunction(name = "my_function", description = "Description of what this function does")
-    public String myFunction(
-        @KernelFunctionParameter(name = "param1", description = "Description of parameter") String param1) {
-        // Your function logic here
-        return "Function result";
+    @Tool("Description of what this tool does")
+    public String myTool(String param1) {
+        // Your tool logic here
+        return "Tool result";
     }
 }
 ```
@@ -156,11 +149,11 @@ public class MyCustomPlugin {
 Then register it in `BuddyActivities.java`:
 
 ```java
-KernelPlugin myPlugin = KernelPluginFactory.createFromObject(new MyCustomPlugin(), "MyPlugin");
-this.kernel = Kernel.builder()
-    .withAIService(ChatCompletionService.class, chatCompletionService)
-    .withPlugin(buddyPlugin)
-    .withPlugin(myPlugin)  // Add your plugin
+MyCustomTool myTool = new MyCustomTool();
+this.assistant = AiServices.builder(BuddyAssistant.class)
+    .chatLanguageModel(chatModel)
+    .chatMemory(chatMemory)
+    .tools(buddyPlugin, myTool)  // Add your tool
     .build();
 ```
 
@@ -172,7 +165,7 @@ mvn test
 
 ### Mock Mode
 
-If no API keys are configured, Buddy runs in mock mode with predefined responses, perfect for development and testing.
+If no API key is configured, Buddy runs in mock mode with predefined responses, perfect for development and testing.
 
 ## Configuration
 
@@ -207,6 +200,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 For questions and support:
-- Review the [Semantic Kernel documentation](https://learn.microsoft.com/en-us/semantic-kernel/)
+- Review the [LangChain4j documentation](https://github.com/langchain4j/langchain4j)
 - Check the [Temporal documentation](https://docs.temporal.io/)
 - Open an issue in this repository

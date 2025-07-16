@@ -8,12 +8,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.microsoft.semantickernel.semanticfunctions.annotations.DefineKernelFunction;
-import com.microsoft.semantickernel.semanticfunctions.annotations.KernelFunctionParameter;
+import dev.langchain4j.agent.tool.Tool;
 
 /**
  * Buddy AI Plugin providing useful functions for the AI assistant
- * This demonstrates how to create native plugins for Semantic Kernel
+ * This demonstrates how to create native tools for LangChain4j
  */
 public class BuddyPlugin {
     
@@ -30,7 +29,7 @@ public class BuddyPlugin {
         logger.info("BuddyPlugin initialized");
     }
     
-    @DefineKernelFunction(name = "get_current_time", description = "Gets the current date and time")
+    @Tool("Gets the current date and time")
     public String getCurrentTime() {
         logger.info("Getting current time");
         LocalDateTime now = LocalDateTime.now();
@@ -38,9 +37,8 @@ public class BuddyPlugin {
         return now.format(formatter);
     }
     
-    @DefineKernelFunction(name = "get_weather", description = "Gets weather information for a location")
-    public String getWeather(
-        @KernelFunctionParameter(name = "location", description = "The location to get weather for") String location) {
+    @Tool("Gets weather information for a location")
+    public String getWeather(String location) {
         logger.info("Getting weather for location: {}", location);
         
         // Mock weather response - in a real implementation, this would call a weather API
@@ -48,9 +46,8 @@ public class BuddyPlugin {
             "It's a beautiful day with light winds and clear skies.", location);
     }
     
-    @DefineKernelFunction(name = "get_user_info", description = "Gets information about the current user")
-    public String getUserInfo(
-        @KernelFunctionParameter(name = "info_type", description = "The type of user information to retrieve (name, preferences, etc.)") String infoType) {
+    @Tool("Gets information about the current user")
+    public String getUserInfo(String infoType) {
         logger.info("Getting user info for type: {}", infoType);
         
         String result = userData.get(infoType.toLowerCase());
@@ -61,19 +58,16 @@ public class BuddyPlugin {
         }
     }
     
-    @DefineKernelFunction(name = "set_user_preference", description = "Sets a user preference")
-    public String setUserPreference(
-        @KernelFunctionParameter(name = "preference_key", description = "The preference key to set") String key,
-        @KernelFunctionParameter(name = "preference_value", description = "The preference value to set") String value) {
+    @Tool("Sets a user preference")
+    public String setUserPreference(String key, String value) {
         logger.info("Setting user preference: {} = {}", key, value);
         
         userData.put(key.toLowerCase(), value);
         return String.format("User preference '%s' has been set to '%s'", key, value);
     }
     
-    @DefineKernelFunction(name = "calculate", description = "Performs simple mathematical calculations")
-    public String calculate(
-        @KernelFunctionParameter(name = "expression", description = "The mathematical expression to evaluate (e.g., '2 + 2', '10 * 5')") String expression) {
+    @Tool("Performs simple mathematical calculations")
+    public String calculate(String expression) {
         logger.info("Calculating expression: {}", expression);
         
         try {
@@ -102,7 +96,7 @@ public class BuddyPlugin {
         }
     }
     
-    @DefineKernelFunction(name = "help", description = "Provides help information about available functions")
+    @Tool("Provides help information about available functions")
     public String getHelp() {
         logger.info("Providing help information");
         
