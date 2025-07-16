@@ -15,9 +15,9 @@ A powerful AI-powered assistant built with Java, integrating **Temporal workflow
 
 ### Prerequisites
 
-- Java 17 or higher
+- Java 21 or higher
 - Maven 3.6+
-- OpenAI API key or Azure OpenAI service
+- OpenAI API key
 
 ### Environment Setup
 
@@ -112,23 +112,6 @@ src/main/java/com/jase/
 - **Maven**: Build and dependency management
 - **SLF4J + Logback**: Logging framework
 
-### Key Dependencies
-
-```xml
-<dependency>
-    <groupId>dev.langchain4j</groupId>
-    <artifactId>langchain4j</artifactId>
-</dependency>
-<dependency>
-    <groupId>dev.langchain4j</groupId>
-    <artifactId>langchain4j-open-ai</artifactId>
-</dependency>
-<dependency>
-    <groupId>io.temporal</groupId>
-    <artifactId>temporal-sdk</artifactId>
-</dependency>
-```
-
 ## Development
 
 ### Creating Custom Tools
@@ -184,22 +167,3 @@ app.version=1.0-SNAPSHOT
 ### Logging Configuration
 
 Customize logging behavior in `src/main/resources/logback.xml`.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-For questions and support:
-- Review the [LangChain4j documentation](https://github.com/langchain4j/langchain4j)
-- Check the [Temporal documentation](https://docs.temporal.io/)
-- Open an issue in this repository

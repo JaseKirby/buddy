@@ -21,6 +21,9 @@ public class BuddyApplication {
     private static final String TASK_QUEUE = "buddy-task-queue";
     
     public static void main(String[] args) {
+        // Configure Logback programmatically
+        LogbackConfig.configure();
+        
         logger.info("Starting Buddy AI Agent...");
         
         // Create Temporal client
