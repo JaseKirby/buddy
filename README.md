@@ -101,7 +101,7 @@ src/main/java/com/jase/
 ├── BuddyActivities.java           # LangChain4j integration
 ├── BuddyActivitiesInterface.java  # Activities interface
 ├── BuddyPlugin.java               # Custom plugin with utility functions
-└── BuddyConfig.java               # Configuration management
+└── LogbackConfig.java             # Programmatic logging configuration
 ```
 
 ### Technology Stack
@@ -152,14 +152,6 @@ If no API key is configured, Buddy runs in mock mode with predefined responses, 
 
 ## Configuration
 
-### Application Properties
+### Logging Configuration
 
-Configure logging and other settings in `src/main/resources/application.properties`:
-
-```properties
-# Application settings
-app.name=Buddy AI Agent
-app.version=1.0-SNAPSHOT
-
-# Add your custom configuration here
-```
+Logging is configured programmatically in the `LogbackConfig` class, which is initialized at application startup. You can modify logging levels and behavior by editing the `LogbackConfig.configure()` method.

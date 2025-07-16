@@ -62,13 +62,4 @@ public class BuddyWorkflowTest {
         assertFalse(weatherResponse.trim().isEmpty());
     }
     
-    @Test
-    public void testConfigConstants() {
-        // Test that configuration constants are accessible
-        assertNotNull(BuddyConfig.TASK_QUEUE);
-        assertNotNull(BuddyConfig.DEFAULT_MODEL);
-        assertNotNull(BuddyConfig.SYSTEM_PROMPT);
-        assertEquals("buddy-task-queue", BuddyConfig.TASK_QUEUE);
-        assertEquals("gpt-4o-mini", BuddyConfig.DEFAULT_MODEL);
-    }
 }
